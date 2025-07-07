@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[YTS Movies RSS Feed - 720p - all]]></title><description><![CDATA[Latest movies from YTS in 720p quality for all genre]]></description><link>https://yts.mx</link><image><url>https://yts.mx/assets/images/website/logo-YTS.svg</url><title>YTS Movies RSS Feed - 720p - all</title><link>https://yts.mx</link></image><generator>RSS for Node</generator><lastBuildDate>Mon, 07 Jul 2025 04:02:07 GMT</lastBuildDate><atom:link href="http://localhost:3000/rss" rel="self" type="application/rss+xml"/><pubDate>Mon, 07 Jul 2025 04:02:07 GMT</pubDate><copyright><![CDATA[2025 YTS]]></copyright><language><![CDATA[en]]></language><managingEditor><![CDATA[YTS]]></managingEditor><webMaster><![CDATA[YTS]]></webMaster><ttl>60</ttl><category><![CDATA[Movies]]></category><category><![CDATA[Entertainment]]></category><item><title><![CDATA[Mitt (2014)]]></title><description><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[YTS Movies RSS Feed - 720p - all]]></title><description><![CDATA[Latest movies from YTS in 720p quality for all genre]]></description><link>https://yts.mx</link><image><url>https://yts.mx/assets/images/website/logo-YTS.svg</url><title>YTS Movies RSS Feed - 720p - all</title><link>https://yts.mx</link></image><generator>RSS for Node</generator><lastBuildDate>Mon, 07 Jul 2025 04:15:02 GMT</lastBuildDate><atom:link href="http://localhost:3000/rss" rel="self" type="application/rss+xml"/><pubDate>Mon, 07 Jul 2025 04:15:02 GMT</pubDate><copyright><![CDATA[2025 YTS]]></copyright><language><![CDATA[en]]></language><managingEditor><![CDATA[YTS]]></managingEditor><webMaster><![CDATA[YTS]]></webMaster><ttl>60</ttl><category><![CDATA[Movies]]></category><category><![CDATA[Entertainment]]></category><item><title><![CDATA[Mitt (2014)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2014</p>
       <p><strong>Rating:</strong> 6.8/10 (94 min)</p>
       <p><strong>Genres:</strong> Biography, Documentary, Family, News</p>
@@ -84,8 +84,8 @@
       <p><strong>Genres:</strong> Action, Adventure, Horror</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 721.59 MB - Seeds: 0 - Peers: 0 - https://yts.mx/torrent/download/AF49F659C7D763043BA239143B0AA03668050BBC
-1080p - 1.45 GB - Seeds: 0 - Peers: 0 - https://yts.mx/torrent/download/82DB8D12CFAD227DAD1D1F365BF8CA62E7FF1CE3</pre>
+      <pre>720p - 721.59 MB - Seeds: 100 - Peers: 32 - https://yts.mx/torrent/download/AF49F659C7D763043BA239143B0AA03668050BBC
+1080p - 1.45 GB - Seeds: 100 - Peers: 57 - https://yts.mx/torrent/download/82DB8D12CFAD227DAD1D1F365BF8CA62E7FF1CE3</pre>
       <p><a href="https://yts.mx/movies/spiders-on-a-plane-2024">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/spiders-on-a-plane-2024</link><guid isPermaLink="false">70002</guid><pubDate>Sun, 06 Jul 2025 17:24:48 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/spiders_on_a_plane_2024/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Savior (1998)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 1998</p>
@@ -255,8 +255,8 @@
       <p><strong>Genres:</strong> Drama</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 681.03 MB - Seeds: 49 - Peers: 7 - https://yts.mx/torrent/download/2B41F13391F63F43A70ED6716B64036648F9E00A
-1080p - 1.23 GB - Seeds: 69 - Peers: 7 - https://yts.mx/torrent/download/95F966F910CE6375ED2913A477CFE8393C054657</pre>
+      <pre>720p - 681.03 MB - Seeds: 37 - Peers: 3 - https://yts.mx/torrent/download/2B41F13391F63F43A70ED6716B64036648F9E00A
+1080p - 1.23 GB - Seeds: 72 - Peers: 6 - https://yts.mx/torrent/download/95F966F910CE6375ED2913A477CFE8393C054657</pre>
       <p><a href="https://yts.mx/movies/borderline-1930">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/borderline-1930</link><guid isPermaLink="false">69983</guid><pubDate>Fri, 04 Jul 2025 16:05:46 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/borderline_1930/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Missing Persons Unit (2007)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2007</p>
@@ -312,7 +312,7 @@
       <p><strong>Available Torrents:</strong></p>
       <pre>720p - 886.15 MB - Seeds: 100 - Peers: 100 - https://yts.mx/torrent/download/5A2C4EF6AB5CAB4148AA221EE4E4F7C40ECE8A61
 1080p - 1.78 GB - Seeds: 100 - Peers: 100 - https://yts.mx/torrent/download/8672ADB1226B570E4D0C6019509B399D9C63CF7B
-2160p - 4.3 GB - Seeds: 100 - Peers: 66 - https://yts.mx/torrent/download/2BCFF978B1D2322E1134AD575A578CCCAA85B10B</pre>
+2160p - 4.3 GB - Seeds: 100 - Peers: 43 - https://yts.mx/torrent/download/2BCFF978B1D2322E1134AD575A578CCCAA85B10B</pre>
       <p><a href="https://yts.mx/movies/pretty-thing-2025">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/pretty-thing-2025</link><guid isPermaLink="false">69977</guid><pubDate>Fri, 04 Jul 2025 08:45:29 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/pretty_thing_2025/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Pretty Hurts (2024)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2024</p>
@@ -711,8 +711,8 @@
       <p><strong>Genres:</strong> Action, Crime, Thriller</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 916.18 MB - Seeds: 100 - Peers: 42 - https://yts.mx/torrent/download/D86784186AC0293A0F3B002554A25E6F9C984F79
-1080p - 1.84 GB - Seeds: 100 - Peers: 74 - https://yts.mx/torrent/download/BC96667F39E9FF1A1DC4E5B6F3BF890A028EC64C</pre>
+      <pre>720p - 916.18 MB - Seeds: 100 - Peers: 52 - https://yts.mx/torrent/download/D86784186AC0293A0F3B002554A25E6F9C984F79
+1080p - 1.84 GB - Seeds: 100 - Peers: 47 - https://yts.mx/torrent/download/BC96667F39E9FF1A1DC4E5B6F3BF890A028EC64C</pre>
       <p><a href="https://yts.mx/movies/stand-your-ground-2024">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/stand-your-ground-2024</link><guid isPermaLink="false">69927</guid><pubDate>Tue, 01 Jul 2025 04:29:47 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/stand_your_ground_2025/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[A Machu Picchu Proposal (2025)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2025</p>
@@ -1039,8 +1039,8 @@
       <p><strong>Genres:</strong> Action, Fantasy</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 890 MB - Seeds: 30 - Peers: 7 - https://yts.mx/torrent/download/5EA1E84D46D04DCA1DDE376762F10C0EBF66C76A
-1080p - 1.61 GB - Seeds: 74 - Peers: 7 - https://yts.mx/torrent/download/0E49ED5AC8A6720C20F2E5410F4B6B7001AD3EA2</pre>
+      <pre>720p - 890 MB - Seeds: 38 - Peers: 4 - https://yts.mx/torrent/download/5EA1E84D46D04DCA1DDE376762F10C0EBF66C76A
+1080p - 1.61 GB - Seeds: 67 - Peers: 8 - https://yts.mx/torrent/download/0E49ED5AC8A6720C20F2E5410F4B6B7001AD3EA2</pre>
       <p><a href="https://yts.mx/movies/buddhas-palm-1982">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/buddhas-palm-1982</link><guid isPermaLink="false">69885</guid><pubDate>Sun, 29 Jun 2025 16:22:04 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/buddhas_palm_1982/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Turtle Beach (1992)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 1992</p>
@@ -1815,8 +1815,8 @@
       <p><strong>Genres:</strong> Documentary, Music</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 824.06 MB - Seeds: 8 - Peers: 2 - https://yts.mx/torrent/download/DAB627655B845C14A3693D90390DAFEF8A9C4E73
-1080p - 1.65 GB - Seeds: 16 - Peers: 4 - https://yts.mx/torrent/download/00A2B5114200B5F8561D58A0E57FDD79522CB045</pre>
+      <pre>720p - 824.06 MB - Seeds: 9 - Peers: 4 - https://yts.mx/torrent/download/DAB627655B845C14A3693D90390DAFEF8A9C4E73
+1080p - 1.65 GB - Seeds: 13 - Peers: 4 - https://yts.mx/torrent/download/00A2B5114200B5F8561D58A0E57FDD79522CB045</pre>
       <p><a href="https://yts.mx/movies/a-king-like-me-2024">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/a-king-like-me-2024</link><guid isPermaLink="false">69801</guid><pubDate>Thu, 19 Jun 2025 10:26:57 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/a_king_like_me_2024/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Muromachi Burai (2025)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2025</p>
@@ -2035,8 +2035,8 @@
       <p><strong>Genres:</strong> Action, Animation, Comedy, Family</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 227.12 MB - Seeds: 47 - Peers: 9 - https://yts.mx/torrent/download/8056A6D845339A9BD76693EBD91599C4C37F40A3
-1080p - 464.92 MB - Seeds: 93 - Peers: 5 - https://yts.mx/torrent/download/B613536D47DC775069F2CED10E36C3789C7DD4C3</pre>
+      <pre>720p - 227.12 MB - Seeds: 44 - Peers: 9 - https://yts.mx/torrent/download/8056A6D845339A9BD76693EBD91599C4C37F40A3
+1080p - 464.92 MB - Seeds: 84 - Peers: 9 - https://yts.mx/torrent/download/B613536D47DC775069F2CED10E36C3789C7DD4C3</pre>
       <p><a href="https://yts.mx/movies/kung-fu-panda-secrets-of-the-furious-five-2008">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/kung-fu-panda-secrets-of-the-furious-five-2008</link><guid isPermaLink="false">69778</guid><pubDate>Thu, 19 Jun 2025 16:44:26 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/kung_fu_panda_secrets_of_the_furious_five_2008/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Chain of Command (1994)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 1994</p>
@@ -2124,8 +2124,8 @@
       <p><strong>Genres:</strong> Crime, Drama, Thriller</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 805.75 MB - Seeds: 100 - Peers: 8 - https://yts.mx/torrent/download/216158E5284F8597475D06D6366246BFAB85A2CF
-1080p - 1.46 GB - Seeds: 100 - Peers: 11 - https://yts.mx/torrent/download/C73C844B0603B36C7F5CC41916A9C43271DFA6AA</pre>
+      <pre>720p - 805.75 MB - Seeds: 100 - Peers: 4 - https://yts.mx/torrent/download/216158E5284F8597475D06D6366246BFAB85A2CF
+1080p - 1.46 GB - Seeds: 100 - Peers: 13 - https://yts.mx/torrent/download/C73C844B0603B36C7F5CC41916A9C43271DFA6AA</pre>
       <p><a href="https://yts.mx/movies/kidnapped-by-a-killer-the-heather-robinson-story-2025">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/kidnapped-by-a-killer-the-heather-robinson-story-2025</link><guid isPermaLink="false">69768</guid><pubDate>Tue, 17 Jun 2025 23:03:25 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/kidnapped_by_a_killer_the_heather_robinson_story_2025/large-cover.jpg" length="0" type="image/jpeg"/></item><item><title><![CDATA[Notice to Quit (2024)]]></title><description><![CDATA[
       <p><strong>Year:</strong> 2024</p>
@@ -2288,7 +2288,7 @@
       <p><strong>Genres:</strong> Comedy</p>
       <p><strong>Summary:</strong> No summary available</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>720p - 561.19 MB - Seeds: 11 - Peers: 1 - https://yts.mx/torrent/download/AE6C01910B13F03D389E8EE4A1E6692E5BBC17FC
-1080p - 1.02 GB - Seeds: 10 - Peers: 3 - https://yts.mx/torrent/download/EDB54CF4416DAE8E0C56380C6A2E2D0198FEE888</pre>
+      <pre>720p - 561.19 MB - Seeds: 10 - Peers: 2 - https://yts.mx/torrent/download/AE6C01910B13F03D389E8EE4A1E6692E5BBC17FC
+1080p - 1.02 GB - Seeds: 14 - Peers: 3 - https://yts.mx/torrent/download/EDB54CF4416DAE8E0C56380C6A2E2D0198FEE888</pre>
       <p><a href="https://yts.mx/movies/old-man-slaughter-2024">View on YTS</a></p>
     ]]></description><link>https://yts.mx/movies/old-man-slaughter-2024</link><guid isPermaLink="false">69748</guid><pubDate>Tue, 17 Jun 2025 22:05:50 GMT</pubDate><enclosure url="https://yts.mx/assets/images/movies/old_man_slaughter_2024/large-cover.jpg" length="0" type="image/jpeg"/></item></channel></rss>
