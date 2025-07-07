@@ -87,14 +87,33 @@ function createRSSFeed(movies, params = {}) {
 
   movies.forEach(movie => {
     const torrents = movie.torrents || [];
-    const torrentLinks = torrents.map(t => 
-      `${t.quality} - ${t.size} - Seeds: ${t.seeds} - Peers: ${t.peers} - ${t.url}`
+    
+    // Filter torrents by requested quality if specified
+    const filteredTorrents = quality === 'all' 
+      ? torrents 
+      : torrents.filter(t => t.quality === quality);
+    
+    // Use the best quality torrent available
+    const bestTorrent = filteredTorrents.length > 0 
+      ? filteredTorrents[0] 
+      : torrents[0];
+    
+    if (!bestTorrent) return; // Skip if no torrent available
+    
+    // Generate magnet link from hash
+    const magnetLink = `magnet:?xt=urn:btih:${bestTorrent.hash}&dn=${encodeURIComponent(movie.title + ' (' + movie.year + ') [' + bestTorrent.quality + '] [YTS.MX]')}&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://torrent.gresille.org:80/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969`;
+    
+    const torrentLinks = filteredTorrents.map(t => 
+      `${t.quality} - ${t.size} - Seeds: ${t.seeds} - Peers: ${t.peers}`
     ).join('\n');
     
     const description = `
       <p><strong>Year:</strong> ${movie.year}</p>
       <p><strong>Rating:</strong> ${movie.rating}/10 (${movie.runtime} min)</p>
       <p><strong>Genres:</strong> ${movie.genres ? movie.genres.join(', ') : 'N/A'}</p>
+      <p><strong>Quality:</strong> ${bestTorrent.quality}</p>
+      <p><strong>Size:</strong> ${bestTorrent.size}</p>
+      <p><strong>Seeds/Peers:</strong> ${bestTorrent.seeds}/${bestTorrent.peers}</p>
       <p><strong>Summary:</strong> ${movie.summary || 'No summary available'}</p>
       <p><strong>Available Torrents:</strong></p>
       <pre>${torrentLinks}</pre>
@@ -102,15 +121,15 @@ function createRSSFeed(movies, params = {}) {
     `;
 
     feed.item({
-      title: `${movie.title} (${movie.year})`,
+      title: `${movie.title} (${movie.year}) [${bestTorrent.quality}]`,
       description: description,
-      url: movie.url,
-      guid: movie.id.toString(),
+      url: magnetLink,  // Use magnet link instead of YTS page URL
+      guid: movie.id.toString() + '-' + bestTorrent.hash,
       date: new Date(movie.date_uploaded),
-      enclosure: movie.large_cover_image ? {
-        url: movie.large_cover_image,
-        type: 'image/jpeg'
-      } : undefined
+      enclosure: {
+        url: magnetLink,
+        type: 'application/x-bittorrent'
+      }
     });
   });
 
