@@ -1,6 +1,8 @@
 const express = require('express');
 const RSS = require('rss');
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -129,6 +131,40 @@ function createRSSFeed(movies, params = {}) {
   return feed.xml();
 }
 
+// Generate static RSS files
+async function generateStaticRSS() {
+  const feedConfigs = [
+    { quality: 'all', genre: 'all', filename: 'all.xml' },
+    { quality: '2160p', genre: 'all', filename: '2160p.xml' },
+    { quality: '1080p', genre: 'all', filename: '1080p.xml' },
+    { quality: '720p', genre: 'all', filename: '720p.xml' },
+    { quality: '1080p', genre: 'action', filename: '1080p-action.xml' },
+    { quality: '1080p', genre: 'horror', filename: '1080p-horror.xml' }
+  ];
+
+  const outputDir = path.join(__dirname, 'feeds');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+
+  for (const config of feedConfigs) {
+    try {
+      console.log(`Generating RSS for ${config.quality} ${config.genre}...`);
+      const movies = await fetchAllMovies(config);
+      const rssXml = createRSSFeed(movies, config);
+      
+      const filePath = path.join(outputDir, config.filename);
+      fs.writeFileSync(filePath, rssXml);
+      console.log(`✅ Generated ${config.filename} with ${movies.length} movies`);
+      
+      // Wait between API calls
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`❌ Error generating ${config.filename}:`, error);
+    }
+  }
+}
+
 // Routes
 app.get('/', (req, res) => {
   res.send(`
@@ -189,7 +225,19 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`YTS RSS Converter running on port ${PORT}`);
-  console.log(`Visit http://localhost:${PORT} for usage instructions`);
-});
+// Run if called directly (don't start server)
+if (require.main === module) {
+  generateStaticRSS().then(() => {
+    console.log('✅ All RSS feeds generated successfully!');
+    process.exit(0);
+  }).catch(error => {
+    console.error('❌ Error generating RSS feeds:', error);
+    process.exit(1);
+  });
+} else {
+  // Only start server if imported as module
+  app.listen(PORT, () => {
+    console.log(`YTS RSS Converter running on port ${PORT}`);
+    console.log(`Visit http://localhost:${PORT} for usage instructions`);
+  });
+}

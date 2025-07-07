@@ -9,10 +9,22 @@ Convert YTS movie API to RSS feed with unlimited results (not limited to 100 ite
 - 🎬 Filter by quality, genre, rating
 - ⚡ Built-in caching (5 minutes)
 - 🚀 Easy deployment to cloud platforms
+- ⏰ **Automatic hourly updates via GitHub Actions**
+- 📁 **Static RSS files generated automatically**
+
+## How Data Pulling Works
+
+Your RSS converter pulls new items **directly through JSON API calls** to YTS:
+
+1. **Real-time fetching**: Makes HTTP requests to `https://yts.mx/api/v2/list_movies.json`
+2. **Auto-pagination**: Loops through ALL pages (unlimited items vs 100 limit of original RSS)
+3. **Smart caching**: Results cached for 5 minutes to respect API limits
+4. **Automatic updates**: GitHub Actions runs every hour to generate fresh static RSS files
 
 ## Usage
 
-### Local Development
+### Option 1: Live API (Dynamic)
+Run the server and get real-time data:
 ```bash
 npm install
 npm start
@@ -20,7 +32,23 @@ npm start
 
 Visit `http://localhost:3000` for usage instructions.
 
-### RSS Endpoints
+### Option 2: Static RSS Files (Updated Hourly)
+Access pre-generated RSS files that update every hour automatically:
+
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/all.xml` - All movies
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/2160p.xml` - 4K movies only
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/1080p.xml` - 1080p movies only
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/720p.xml` - 720p movies only
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/1080p-action.xml` - 1080p action movies
+- `https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/main/feeds/1080p-horror.xml` - 1080p horror movies
+
+### Manual RSS Generation
+Generate static RSS files locally:
+```bash
+node index.js
+```
+
+### RSS Endpoints (Live Server)
 
 - `/rss` - All movies
 - `/rss?quality=2160p` - 4K movies only
@@ -34,6 +62,15 @@ Visit `http://localhost:3000` for usage instructions.
 - **rating**: minimum rating (0-9)
 - **sort_by**: title, year, rating, seeds, date_added, etc.
 - **order_by**: desc, asc
+
+## Automatic Updates
+
+The repository includes GitHub Actions that:
+- ✅ Run every hour automatically
+- ✅ Fetch latest movies from YTS API
+- ✅ Generate fresh RSS files
+- ✅ Commit changes back to repository
+- ✅ No server maintenance required!
 
 ## Deployment
 
