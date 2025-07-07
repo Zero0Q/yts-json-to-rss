@@ -43,8 +43,8 @@ async function fetchAllMovies(params = {}) {
   let page = 1;
   let hasMore = true;
   
-  // Limit to first few pages to avoid timeout in GitHub Actions
-  const maxPages = 5; // This will get ~250 movies instead of trying to fetch ALL
+  // Increase limit to get ~3800+ movies (80 pages × 50 movies = 4000 movies)
+  const maxPages = 80; // Increased from 5 to get 3800+ items
   
   while (hasMore && page <= maxPages) {
     try {
@@ -64,9 +64,9 @@ async function fetchAllMovies(params = {}) {
         // Continue if we got a full page of results
         hasMore = data.data.movies.length === 50;
         
-        // Add delay to be respectful to the API
+        // Reduce delay to speed up fetching while being respectful to API
         if (hasMore && page <= maxPages) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 500)); // Reduced from 1000ms to 500ms
         }
       } else {
         console.log('No more movies found or invalid response');
@@ -74,7 +74,10 @@ async function fetchAllMovies(params = {}) {
       }
     } catch (error) {
       console.error(`Error fetching page ${page}:`, error);
-      hasMore = false;
+      // Continue with next page instead of stopping completely
+      page++;
+      // Add delay on error to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
   
