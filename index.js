@@ -39,31 +39,37 @@ async function fetchYTSData(params = {}) {
 
 // Helper function to fetch all pages
 async function fetchAllMovies(params = {}) {
-  const now = Date.now();
-  
-  // Check cache
-  if (cache.data && cache.timestamp && (now - cache.timestamp) < cache.ttl) {
-    return cache.data;
-  }
-
   const allMovies = [];
   let page = 1;
   let hasMore = true;
   
-  while (hasMore) {
+  // Limit to first few pages to avoid timeout in GitHub Actions
+  const maxPages = 5; // This will get ~250 movies instead of trying to fetch ALL
+  
+  while (hasMore && page <= maxPages) {
     try {
+      console.log(`Fetching page ${page} for ${params.quality || 'all'} ${params.genre || 'all'}...`);
       const data = await fetchYTSData({ ...params, page, limit: 50 });
       
-      if (data.status === 'ok' && data.data.movies) {
+      console.log(`Page ${page} response:`, {
+        status: data.status,
+        hasData: !!data.data,
+        hasMovies: !!data.data?.movies,
+        movieCount: data.data?.movies?.length || 0
+      });
+      
+      if (data.status === 'ok' && data.data && data.data.movies && Array.isArray(data.data.movies)) {
         allMovies.push(...data.data.movies);
         page++;
+        // Continue if we got a full page of results
         hasMore = data.data.movies.length === 50;
         
         // Add delay to be respectful to the API
-        if (hasMore) {
-          await new Promise(resolve => setTimeout(resolve, 500));
+        if (hasMore && page <= maxPages) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
       } else {
+        console.log('No more movies found or invalid response');
         hasMore = false;
       }
     } catch (error) {
@@ -72,10 +78,7 @@ async function fetchAllMovies(params = {}) {
     }
   }
   
-  // Update cache
-  cache.data = allMovies;
-  cache.timestamp = now;
-  
+  console.log(`Total movies collected: ${allMovies.length}`);
   return allMovies;
 }
 
