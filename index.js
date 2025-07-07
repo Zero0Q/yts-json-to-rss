@@ -159,12 +159,12 @@ function createRSSFeed(movies, params = {}) {
 // Generate static RSS files
 async function generateStaticRSS() {
   const feedConfigs = [
-    { quality: 'all', genre: 'all', filename: 'all.xml' },
-    { quality: '2160p', genre: 'all', filename: '2160p.xml' },
-    { quality: '1080p', genre: 'all', filename: '1080p.xml' },
-    { quality: '720p', genre: 'all', filename: '720p.xml' },
-    { quality: '1080p', genre: 'action', filename: '1080p-action.xml' },
-    { quality: '1080p', genre: 'horror', filename: '1080p-horror.xml' }
+    { quality: 'all', genre: 'all', filename: 'all.xml', sort_by: 'date_added', order_by: 'desc' },
+    { quality: '2160p', genre: 'all', filename: '2160p.xml', sort_by: 'date_added', order_by: 'desc' },
+    { quality: '1080p', genre: 'all', filename: '1080p.xml', sort_by: 'date_added', order_by: 'desc' },
+    { quality: '720p', genre: 'all', filename: '720p.xml', sort_by: 'date_added', order_by: 'desc' },
+    { quality: '1080p', genre: 'action', filename: '1080p-action.xml', sort_by: 'date_added', order_by: 'desc' },
+    { quality: '1080p', genre: 'horror', filename: '1080p-horror.xml', sort_by: 'date_added', order_by: 'desc' }
   ];
 
   const outputDir = path.join(__dirname, 'feeds');
