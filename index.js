@@ -105,47 +105,50 @@ function createRSSFeed(movies, params = {}) {
     const torrents = movie.torrents || [];
     
     // Filter torrents by requested quality if specified
-    const filteredTorrents = quality === 'all' 
+    let filteredTorrents = quality === 'all' 
       ? torrents 
       : torrents.filter(t => t.quality === quality);
     
-    // Use the best quality torrent available
-    const bestTorrent = filteredTorrents.length > 0 
-      ? filteredTorrents[0] 
-      : torrents[0];
+    // If no torrents match the specific quality, fall back to all torrents
+    if (filteredTorrents.length === 0) {
+      filteredTorrents = torrents;
+    }
     
-    if (!bestTorrent) return; // Skip if no torrent available
+    // Skip if no torrents available
+    if (filteredTorrents.length === 0) return;
     
-    // Generate magnet link from hash
-    const magnetLink = `magnet:?xt=urn:btih:${bestTorrent.hash}&dn=${encodeURIComponent(movie.title + ' (' + movie.year + ') [' + bestTorrent.quality + '] [YTS.MX]')}&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://torrent.gresille.org:80/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969`;
-    
-    const torrentLinks = filteredTorrents.map(t => 
-      `${t.quality} - ${t.size} - Seeds: ${t.seeds} - Peers: ${t.peers}`
-    ).join('\n');
-    
-    const description = `
+    // For each quality, create a separate RSS item
+    filteredTorrents.forEach(torrent => {
+      // Generate magnet link from hash with proper YTS trackers
+      const magnetLink = `magnet:?xt=urn:btih:${torrent.hash}&dn=${encodeURIComponent(movie.title + ' (' + movie.year + ') [' + torrent.quality + '] [YTS.MX]')}&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://torrent.gresille.org:80/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://9.rarbg.to:2710&tr=udp://p4p.arenabg.ch:1337&tr=udp://exodus.desync.com:6969&tr=udp://tracker.tiny-vps.com:6969&tr=udp://open.stealth.si:80/announce`;
+      
+      const allTorrentLinks = torrents.map(t => 
+        `${t.quality} - ${t.size} - Seeds: ${t.seeds} - Peers: ${t.peers} - https://yts.mx/torrent/download/${t.hash}`
+      ).join('\n');
+      
+      const description = `
       <p><strong>Year:</strong> ${movie.year}</p>
       <p><strong>Rating:</strong> ${movie.rating}/10 (${movie.runtime} min)</p>
       <p><strong>Genres:</strong> ${movie.genres ? movie.genres.join(', ') : 'N/A'}</p>
-      <p><strong>Quality:</strong> ${bestTorrent.quality}</p>
-      <p><strong>Size:</strong> ${bestTorrent.size}</p>
-      <p><strong>Seeds/Peers:</strong> ${bestTorrent.seeds}/${bestTorrent.peers}</p>
       <p><strong>Summary:</strong> ${movie.summary || 'No summary available'}</p>
       <p><strong>Available Torrents:</strong></p>
-      <pre>${torrentLinks}</pre>
+      <pre>${allTorrentLinks}</pre>
       <p><a href="${movie.url}">View on YTS</a></p>
     `;
 
-    feed.item({
-      title: `${movie.title} (${movie.year}) [${bestTorrent.quality}]`,
-      description: description,
-      url: magnetLink,  // Use magnet link instead of YTS page URL
-      guid: movie.id.toString() + '-' + bestTorrent.hash,
-      date: new Date(movie.date_uploaded),
-      enclosure: {
-        url: magnetLink,
-        type: 'application/x-bittorrent'
-      }
+      feed.item({
+        title: `${movie.title} (${movie.year})`,
+        description: description,
+        url: magnetLink,  // Magnet link as the main URL
+        link: magnetLink, // Also set as link for compatibility
+        guid: movie.id.toString(),
+        date: new Date(movie.date_uploaded),
+        enclosure: {
+          url: movie.large_cover_image || movie.medium_cover_image || 'https://yts.mx/assets/images/website/logo-YTS.svg',
+          length: '0',
+          type: 'image/jpeg'
+        }
+      });
     });
   });
 
