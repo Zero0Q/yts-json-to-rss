@@ -1,6 +1,5 @@
 const express = require('express');
 const RSS = require('rss');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const fs = require('fs');
 const path = require('path');
 
