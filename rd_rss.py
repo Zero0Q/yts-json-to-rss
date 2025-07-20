@@ -138,6 +138,9 @@ def parse_feed(rss_url, last_load_date):
     # Try to add magnet from each entry that has not yet been added to Real-Debrid
     # based on update time
     added_count = 0
+    cached_count = 0
+    skipped_count = 0
+    
     for entry in feed.entries:
         # Check if entry has updated_parsed field and it's newer than last_load_date
         # If updated_parsed is None, treat it as a new entry to process
@@ -163,10 +166,16 @@ def parse_feed(rss_url, last_load_date):
                         break
             
             if magnet_link:
-                if add_magnet(magnet_link):
-                    added_count += 1
+                # Check if torrent is cached before adding
+                if check_torrent_cached(magnet_link):
+                    cached_count += 1
+                    if add_magnet(magnet_link):
+                        added_count += 1
+                else:
+                    skipped_count += 1
+                    print("---> Skipping uncached torrent")
 
-    print(f"-> Successfully added {added_count} new magnets to RD.")
+    print(f"-> Found {cached_count} cached torrents, successfully added {added_count} to RD, skipped {skipped_count} uncached.")
 
 
 def convert_yts_to_magnet(torrent_url):
@@ -483,8 +492,8 @@ def remove_rss(n):
     print("RSS url successfully removed.")
 
 
-def auto_add_local_feeds():
-    """Automatically add local RSS feeds from the feeds directory"""
+def auto_add_preferred_feeds():
+    """Automatically add preferred RSS feeds from the feeds directory"""
     global _data
     
     # Load existing data
@@ -495,24 +504,107 @@ def auto_add_local_feeds():
     # Define the base URL for your RSS feeds
     base_url = "https://raw.githubusercontent.com/Zero0Q/yts-json-to-rss/refs/heads/main/feeds/"
     
-    # List of feed files to add
-    feed_files = ["2160p.xml", "1080p.xml", "720p.xml", "all.xml"]
+    # List of preferred feed files to add (only high quality feeds)
+    preferred_feeds = [
+        "2160p.xml"           # 4K content
+
+    ]
     
     added_count = 0
-    for feed_file in feed_files:
+    for feed_file in preferred_feeds:
         feed_url = base_url + feed_file
         if feed_url not in _data["rssUrls"]:
             _data["rssUrls"].append(feed_url)
             added_count += 1
-            print(f"Added RSS feed: {feed_url}")
+            print(f"Added preferred RSS feed: {feed_url}")
     
     if added_count > 0:
         if store_data():
-            print(f"Successfully added {added_count} RSS feeds.")
+            print(f"Successfully added {added_count} preferred RSS feeds.")
         else:
             print("Failed to save RSS feeds.")
     else:
-        print("All RSS feeds already added.")
+        print("All preferred RSS feeds already added.")
+
+
+def extract_hash_from_magnet(magnet_link):
+    """Extract torrent hash from magnet link
+    
+    @param magnet_link Magnet URI
+    @return torrent hash or None
+    """
+    try:
+        # Look for xt=urn:btih: in the magnet link
+        import re
+        match = re.search(r'xt=urn:btih:([a-fA-F0-9]{40})', magnet_link)
+        if match:
+            return match.group(1).lower()
+        
+        # Also try 32-character hash (base32)
+        match = re.search(r'xt=urn:btih:([a-zA-Z2-7]{32})', magnet_link)
+        if match:
+            # Convert base32 to hex if needed
+            import base64
+            try:
+                decoded = base64.b32decode(match.group(1).upper() + '======')
+                return decoded.hex()
+            except:
+                return match.group(1).lower()
+    except Exception as e:
+        print(f"---> Failed to extract hash from magnet: {e}")
+    return None
+
+
+def check_torrent_cached(magnet_link) -> bool:
+    """Check if torrent is cached in Real-Debrid
+    
+    @param magnet_link Magnet URI to check
+    @return bool True if cached, False if not cached or error
+    """
+    
+    # Extract hash from magnet link
+    torrent_hash = extract_hash_from_magnet(magnet_link)
+    if not torrent_hash:
+        print("---> Could not extract hash from magnet link")
+        return False
+    
+    print(f"---> Checking cache for hash: {torrent_hash[:16]}...")
+    
+    try:
+        # Check instant availability
+        result = rate_limited_request(
+            requests.get,
+            f"https://api.real-debrid.com/rest/1.0/torrents/instantAvailability/{torrent_hash}",
+            headers=_headers,
+            timeout=30
+        )
+        
+        if result is None:
+            print("---> Cache check failed: No response received")
+            return False
+        
+        if not process_api_response(result, 3):
+            return False
+        
+        # Parse response
+        availability = result.json()
+        
+        # Check if hash exists in response and has available files
+        if torrent_hash in availability:
+            cached_info = availability[torrent_hash]
+            if isinstance(cached_info, dict) and len(cached_info) > 0:
+                # Check if any variant has files
+                for variant_key, variant_data in cached_info.items():
+                    if isinstance(variant_data, list) and len(variant_data) > 0:
+                        print("---> Torrent is cached in RD!")
+                        return True
+                        
+        print("---> Torrent is not cached in RD")
+        return False
+        
+    except Exception as e:
+        print(f"---> Cache check failed: {e}")
+        return False
 
 
 # SECTION: ARGUMENT PROCESSING
@@ -549,6 +641,6 @@ if __name__ == "__main__":
         if token_check():
             select_files()
     elif args.auto_add_feeds:
-        auto_add_local_feeds()
+        auto_add_preferred_feeds()
     else:
         ready_and_parse()
