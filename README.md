@@ -1,6 +1,6 @@
-# YTS RSS Converter
+# YTS RSS Converter with Real-Debrid Integration
 
-Convert YTS movie API to RSS feed with unlimited results (not limited to 100 items like the original RSS feed).
+Convert YTS movie API to RSS feed with unlimited results and automatically send new torrents to Real-Debrid.
 
 ## Features
 
@@ -11,6 +11,7 @@ Convert YTS movie API to RSS feed with unlimited results (not limited to 100 ite
 - 🚀 Easy deployment to cloud platforms
 - ⏰ **Automatic hourly updates via GitHub Actions**
 - 📁 **Static RSS files generated automatically**
+- 🔄 **Real-Debrid integration - auto-download new torrents**
 
 ## How Data Pulling Works
 
@@ -20,6 +21,61 @@ Your RSS converter pulls new items **directly through JSON API calls** to YTS:
 2. **Auto-pagination**: Loops through ALL pages (unlimited items vs 100 limit of original RSS)
 3. **Smart caching**: Results cached for 5 minutes to respect API limits
 4. **Automatic updates**: GitHub Actions runs every hour to generate fresh static RSS files
+5. **Real-Debrid sync**: Automatically sends new torrents to your Real-Debrid account
+
+## Real-Debrid Integration
+
+The project includes a Python script that automatically processes your RSS feeds and sends new torrents to Real-Debrid:
+
+### Features
+- ✅ Converts YTS torrent URLs to magnet links
+- ✅ Automatically adds new torrents to Real-Debrid
+- ✅ Selects all files for download
+- ✅ Tracks what's already been added (no duplicates)
+- ✅ Runs automatically with RSS updates
+
+### Setup Real-Debrid Integration
+
+1. **Get your Real-Debrid API token:**
+   - Go to https://real-debrid.com/apitoken
+   - Copy your token
+
+2. **Add token to GitHub Secrets:**
+   - Go to your repository → Settings → Secrets and variables → Actions
+   - Add a new secret: `RD_TOKEN` with your Real-Debrid token
+
+3. **The script will automatically:**
+   - Add your RSS feeds to the monitoring list
+   - Check for new movies every hour
+   - Send new torrents to Real-Debrid
+   - Select all files for download
+
+### Manual Real-Debrid Usage
+
+You can also run the Real-Debrid script manually:
+
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Set your token (one time setup)
+python3 rd_rss.py --token YOUR_RD_TOKEN
+
+# Auto-add your RSS feeds
+python3 rd_rss.py --auto-add-feeds
+
+# Process feeds (add new torrents to Real-Debrid)
+python3 rd_rss.py
+
+# List configured RSS feeds
+python3 rd_rss.py --list
+
+# Add a custom RSS feed
+python3 rd_rss.py --add "https://example.com/feed.xml"
+
+# Remove an RSS feed (use --list to get index)
+python3 rd_rss.py --remove 1
+```
 
 ## Usage
 
@@ -69,8 +125,16 @@ The repository includes GitHub Actions that:
 - ✅ Run every hour automatically
 - ✅ Fetch latest movies from YTS API
 - ✅ Generate fresh RSS files
+- ✅ Auto-add RSS feeds to Real-Debrid monitoring
+- ✅ Send new torrents to Real-Debrid automatically
 - ✅ Commit changes back to repository
 - ✅ No server maintenance required!
+
+## Environment Variables
+
+- `PORT` - Server port (default: 3000)
+- `BASE_URL` - Your deployed URL for RSS feed URLs
+- `RD_TOKEN` - Real-Debrid API token (for GitHub Actions)
 
 ## Deployment
 
@@ -93,11 +157,6 @@ git commit -m "Initial commit"
 heroku create your-app-name
 git push heroku main
 ```
-
-## Environment Variables
-
-- `PORT` - Server port (default: 3000)
-- `BASE_URL` - Your deployed URL for RSS feed URLs
 
 ## License
 

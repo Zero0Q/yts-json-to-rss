@@ -26,20 +26,42 @@ jobs:
         node-version: '18'
         cache: 'npm'
         
-    - name: Install dependencies
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install Node.js dependencies
       run: npm ci
+      
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
       
     - name: Generate RSS feeds
       run: node index.js
+      
+    - name: Auto-add RSS feeds to Real-Debrid config
+      run: python3 rd_rss.py --auto-add-feeds
+      
+    - name: Process RSS feeds to Real-Debrid
+      env:
+        RD_TOKEN: ${{ secrets.RD_TOKEN }}
+      run: |
+        if [ -n "$RD_TOKEN" ]; then
+          echo "Processing RSS feeds to Real-Debrid..."
+          python3 rd_rss.py
+        else
+          echo "RD_TOKEN not set, skipping Real-Debrid processing"
+        fi
       
     - name: Commit and push if changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add feeds/
+        git add feeds/ RDRSSconfig/ || true
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Update RSS feeds - $(date)"
+          git commit -m "Update RSS feeds and RD config - $(date)"
           git push
         fi
