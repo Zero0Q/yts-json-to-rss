@@ -11,6 +11,14 @@ import datetime
 import os
 import sys
 
+# Try to load python-dotenv for local development
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # python-dotenv not installed, continue without it
+    pass
+
 # SECTION: VARIABLES
 __location__ = os.path.realpath(os.path.join(
     os.getcwd(), os.path.dirname(__file__)))

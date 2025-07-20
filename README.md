@@ -36,6 +36,7 @@ The project includes a Python script that automatically processes your RSS feeds
 
 ### Setup Real-Debrid Integration
 
+#### For GitHub Actions (Automatic):
 1. **Get your Real-Debrid API token:**
    - Go to https://real-debrid.com/apitoken
    - Copy your token
@@ -50,15 +51,36 @@ The project includes a Python script that automatically processes your RSS feeds
    - Send new torrents to Real-Debrid
    - Select all files for download
 
+#### For Local Development:
+1. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Setup environment file:**
+   ```bash
+   # Copy the example file
+   cp .env.example .env
+   
+   # Edit .env and add your Real-Debrid token
+   # RD_TOKEN=your_real_debrid_token_here
+   ```
+
+3. **Run the script:**
+   ```bash
+   # Auto-add your RSS feeds
+   python3 rd_rss.py --auto-add-feeds
+   
+   # Process feeds (add new torrents to Real-Debrid)
+   python3 rd_rss.py
+   ```
+
 ### Manual Real-Debrid Usage
 
-You can also run the Real-Debrid script manually:
+You can also run the Real-Debrid script manually with command line options:
 
 ```bash
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Set your token (one time setup)
+# Set your token (stored in config file)
 python3 rd_rss.py --token YOUR_RD_TOKEN
 
 # Auto-add your RSS feeds
