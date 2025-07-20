@@ -10,6 +10,8 @@ import argparse
 import datetime
 import os
 import sys
+import time
+import random
 
 # Try to load python-dotenv for local development
 try:
@@ -28,6 +30,12 @@ save_file_name = "RDRSSconfig/rdrss.json"
 save_file_path = os.path.join(__location__, save_file_name)
 
 BASE_DATE_STRING = "2000-01-01 00:00:00"
+
+# Rate limiting and retry configuration
+RATE_LIMIT_DELAY = 1.0  # Base delay between requests in seconds
+MAX_RETRIES = 3  # Maximum number of retries for failed requests
+RETRY_DELAY_BASE = 2  # Base delay for exponential backoff
+MAX_RETRY_DELAY = 30  # Maximum retry delay in seconds
 
 # Variables loaded from file
 _auth_token = ""
@@ -179,6 +187,62 @@ def convert_yts_to_magnet(torrent_url):
     return None
 
 
+def rate_limited_request(func, *args, **kwargs):
+    """Execute API request with rate limiting and retry logic
+    
+    @param func Function to execute (requests.get, requests.post, etc.)
+    @param args Arguments to pass to the function
+    @param kwargs Keyword arguments to pass to the function
+    @return Response object or None if all retries failed
+    """
+    
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            # Add rate limiting delay before each request
+            if attempt > 0:
+                # Exponential backoff for retries
+                delay = min(RETRY_DELAY_BASE ** attempt + random.uniform(0, 1), MAX_RETRY_DELAY)
+                print(f"---> Retrying in {delay:.1f} seconds... (attempt {attempt + 1}/{MAX_RETRIES + 1})")
+                time.sleep(delay)
+            else:
+                # Base rate limit delay for first attempt
+                time.sleep(RATE_LIMIT_DELAY + random.uniform(0, 0.5))
+            
+            # Make the API request
+            response = func(*args, **kwargs)
+            
+            # Check if we hit a rate limit
+            if response.status_code == 429:
+                if attempt < MAX_RETRIES:
+                    print("---> Rate limit hit, will retry...")
+                    continue
+                else:
+                    print("---> Rate limit hit, max retries exceeded")
+                    return response
+            
+            # Check for service unavailable
+            if response.status_code == 503:
+                if attempt < MAX_RETRIES:
+                    print("---> Service unavailable, will retry...")
+                    continue
+                else:
+                    print("---> Service unavailable, max retries exceeded")
+                    return response
+            
+            # For other status codes, return immediately
+            return response
+            
+        except requests.exceptions.RequestException as e:
+            if attempt < MAX_RETRIES:
+                print(f"---> Request failed ({e}), will retry...")
+                continue
+            else:
+                print(f"---> Request failed ({e}), max retries exceeded")
+                return None
+    
+    return None
+
+
 def process_api_response(result, indent=1) -> bool:
     """Process response codes from Real-Debrid api
 
@@ -220,15 +284,21 @@ def add_magnet(magnet) -> bool:
 
     print("--> Adding magnet: " + magnet[:60] + "...")
 
-    # Add magnet to Real-Debrid and process response
+    # Add magnet to Real-Debrid and process response with rate limiting
     request_data = {"magnet": magnet, "host": "real-debrid.com"}
     try:
-        result = requests.post(
+        result = rate_limited_request(
+            requests.post,
             "https://api.real-debrid.com/rest/1.0/torrents/addMagnet", 
             headers=_headers, 
             data=request_data,
             timeout=30
         )
+        
+        if result is None:
+            print("---> Failed to add magnet: No response received")
+            return False
+            
         if not process_api_response(result, 3):
             return False
         print("---> Magnet added successfully")
@@ -244,13 +314,19 @@ def select_files() -> bool:
     @returns bool Files selected successfully
     """
 
-    # Get files from Real-Debrid
+    # Get files from Real-Debrid with rate limiting
     try:
-        result = requests.get(
+        result = rate_limited_request(
+            requests.get,
             "https://api.real-debrid.com/rest/1.0/torrents?limit=100", 
             headers=_headers,
             timeout=30
         )
+        
+        if result is None:
+            print("-> Failed to get torrents: No response received")
+            return False
+            
         if not process_api_response(result):
             print("-> Selecting files on RD failed.")
             return False
@@ -260,11 +336,21 @@ def select_files() -> bool:
         selected_count = 0
         for file in files:
             if file["status"] == "waiting_files_selection":
-                result = requests.post("https://api.real-debrid.com/rest/1.0/torrents/selectFiles/" +
-                                     file["id"], data={"files": "all"}, headers=_headers, timeout=30)
+                result = rate_limited_request(
+                    requests.post,
+                    "https://api.real-debrid.com/rest/1.0/torrents/selectFiles/" + file["id"], 
+                    data={"files": "all"}, 
+                    headers=_headers, 
+                    timeout=30
+                )
+                
+                if result is None:
+                    print("--> Failed to select file: No response received")
+                    continue
+                    
                 if not process_api_response(result):
                     print("--> File could not be selected.")
-                    return False
+                    continue
                 selected_count += 1
 
         print(f"-> Successfully selected {selected_count} files on RD.")
