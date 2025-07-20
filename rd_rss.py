@@ -131,7 +131,13 @@ def parse_feed(rss_url, last_load_date):
     # based on update time
     added_count = 0
     for entry in feed.entries:
-        if (entry.updated_parsed > last_load_date):
+        # Check if entry has updated_parsed field and it's newer than last_load_date
+        # If updated_parsed is None, treat it as a new entry to process
+        should_process = True
+        if hasattr(entry, 'updated_parsed') and entry.updated_parsed is not None:
+            should_process = entry.updated_parsed > last_load_date
+        
+        if should_process:
             # Check if entry has a magnet link or torrent URL
             magnet_link = None
             
