@@ -341,28 +341,61 @@ def select_files() -> bool:
             return False
 
         # Select correct files
-        files = result.json()
+        torrents = result.json()
         selected_count = 0
-        for file in files:
-            if file["status"] == "waiting_files_selection":
-                result = rate_limited_request(
-                    requests.post,
-                    "https://api.real-debrid.com/rest/1.0/torrents/selectFiles/" + file["id"], 
-                    data={"files": "all"}, 
+        
+        for torrent in torrents:
+            if torrent["status"] == "waiting_files_selection":
+                print(f"--> Processing torrent: {torrent.get('filename', 'Unknown')}")
+                
+                # Get torrent info to see available files
+                info_result = rate_limited_request(
+                    requests.get,
+                    f"https://api.real-debrid.com/rest/1.0/torrents/info/{torrent['id']}", 
                     headers=_headers, 
                     timeout=30
                 )
                 
-                if result is None:
-                    print("--> Failed to select file: No response received")
+                if info_result is None:
+                    print("---> Failed to get torrent info: No response received")
                     continue
                     
-                if not process_api_response(result):
-                    print("--> File could not be selected.")
+                if not process_api_response(info_result, 3):
+                    print("---> Failed to get torrent info")
                     continue
-                selected_count += 1
+                
+                torrent_info = info_result.json()
+                
+                # Get all file IDs from the torrent
+                if "files" in torrent_info and torrent_info["files"]:
+                    file_ids = [str(file["id"]) for file in torrent_info["files"]]
+                    files_param = ",".join(file_ids)
+                    
+                    print(f"---> Selecting {len(file_ids)} files: {files_param}")
+                    
+                    # Select files using actual file IDs
+                    select_result = rate_limited_request(
+                        requests.post,
+                        f"https://api.real-debrid.com/rest/1.0/torrents/selectFiles/{torrent['id']}", 
+                        data={"files": files_param}, 
+                        headers=_headers, 
+                        timeout=30
+                    )
+                    
+                    if select_result is None:
+                        print("---> Failed to select files: No response received")
+                        continue
+                        
+                    if not process_api_response(select_result, 3):
+                        print("---> Files could not be selected")
+                        continue
+                        
+                    selected_count += 1
+                    print("---> Files selected successfully!")
+                else:
+                    print("---> No files found in torrent")
 
-        print(f"-> Successfully selected {selected_count} files on RD.")
+        print(f"-> Successfully selected files for {selected_count} torrents on RD.")
         return True
     except Exception as e:
         print(f"-> Failed to select files: {e}")
